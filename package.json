@@ -1,0 +1,9 @@
+{
+  "name": "ai-exercises",
+  "version": "1.0.0",
+  "description": "Exercises for college AI classes",
+  "type": "module",
+  "keywords": [],
+  "author": "Tiago Jose Valdrich",
+  "license": "ISC"
+}
