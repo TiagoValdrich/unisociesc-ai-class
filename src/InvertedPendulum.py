@@ -1,32 +1,74 @@
 import numpy as np
 import skfuzzy as fuzz
-from skfuzzy import control as ctrl
 import matplotlib.pyplot as plt
 
-
-fuzz_pend = ctrl.Antecedent(np.arange(-1, 1.1, 0.1), 'pend')
-fuzz_motor = ctrl.Consequent(np.arange(-300, 300, 1), 'motor')
-fuzz_pend.automf(7)
-fuzz_motor.automf(7)
-
-fuzz_pend['average'].view()
-fuzz_motor['average'].view()
+FP = np.arange(-0.15, 0.15, 0.001)
+FPV = np.arange(-0.15, 0.15, 0.001)
+Force = np.arange(-200, 200, 1)
 
 
-rule1 = ctrl.Rule(fuzz_pend['dismal'], fuzz_motor['dismal'])
-rule2 = ctrl.Rule(fuzz_pend['poor'], fuzz_motor['poor'])
-rule3 = ctrl.Rule(fuzz_pend['mediocre'], fuzz_motor['mediocre'])
-rule4 = ctrl.Rule(fuzz_pend['average'], fuzz_motor['average'])
-rule5 = ctrl.Rule(fuzz_pend['decent'], fuzz_motor['decent'])
-rule6 = ctrl.Rule(fuzz_pend['good'], fuzz_motor['good'])
-rule7 = ctrl.Rule(fuzz_pend['excellent'], fuzz_motor['excellent'])
+FP_N = fuzz.trapmf(FPV, [-0.15, -0.150, -0.10, 0])
+FP_Z = fuzz.trapmf(FPV, [-0.1, -0.03, 0.03, 0.1])
+FP_P = fuzz.trapmf(FPV, [0, 0.1, 0.15, 0.150])
 
-pendulum_ctrl = ctrl.ControlSystem([rule1, rule2, rule3, rule4, rule5, rule6, rule7])
-pendulum_fuzz = ctrl.ControlSystemSimulation(pendulum_ctrl)
 
-pendulum_fuzz.input['pend'] = -1.0
-#pendulum_fuzz.input['motor'] = 9.8
+FPV_N = fuzz.trapmf(FPV, [-0.15, -0.150, -0.10, 0])
+FPV_Z = fuzz.trapmf(FPV, [-0.15, -0.03, 0.03, 0.15])
+FPV_P = fuzz.trapmf(FPV, [0, 0.1, 0.15, 0.150])
 
-pendulum_fuzz.compute()
+Force_NL = fuzz.trimf(Force, [-200, -100, 0])
+Force_NM = fuzz.trimf(Force, [-80, -40, 0])
+Force_NS = fuzz.trimf(Force, [-10, -5, 0])
+Force_Z = fuzz.trimf(Force, [-0, 0, +0])
+Force_PS = fuzz.trimf(Force, [0, 5, 10])
+Force_PM = fuzz.trimf(Force, [0, 40, 80])
+Force_PL = fuzz.trimf(Force, [0, 100, 200])
 
-fuzz_motor.view(pendulum_fuzz)
+fig, (ax0) = plt.subplots(nrows=1, figsize=(6, 5))
+fig, (ax1) = plt.subplots(nrows=1, figsize=(6, 5))
+fig, (ax2) = plt.subplots(nrows=1, figsize=(6, 5))
+
+ax0.plot(FP, FP_P, 'r', linewidth=1.5, label='P')
+ax0.plot(FP, FP_Z, 'b', linewidth=1.5, label='Z')
+ax0.plot(FP, FP_N, 'g', linewidth=1.5, label='N')
+ax0.set_title('Função de pertinência')
+ax0.legend()
+
+ax1.plot(FPV, FPV_P, 'r', linewidth=1.5, label='P')
+ax1.plot(FPV, FPV_Z, 'b', linewidth=1.5, label='Z')
+ax1.plot(FPV, FPV_N, 'g', linewidth=1.5, label='N')
+ax1.set_title('FP da velocidade angular')
+ax1.legend()
+
+ax2.plot(Force, Force_NL, 'r', linewidth=1.5, label='NL')
+ax2.plot(Force, Force_NM, 'b', linewidth=1.5, label='NM')
+ax2.plot(Force, Force_NS, 'g', linewidth=1.5, label='NS')
+ax2.plot(Force, Force_Z, 'b', linewidth=1.5, label='Z')
+ax2.plot(Force, Force_PS, 'g', linewidth=1.5, label='PS')
+ax2.plot(Force, Force_PM, 'y', linewidth=1.5, label='PM')
+ax2.plot(Force, Force_PL, 'r', linewidth=1.5, label='PL')
+ax2.set_title('Force')
+ax2.legend()
+
+
+for ax in (ax0, ax1, ax2):
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.get_xaxis().tick_bottom()
+    ax.get_yaxis().tick_left()
+
+plt.tight_layout()
+plt.show()
+
+
+rule1 = fuzz.interp_membership(FP_N, FPV_N, Force_NL)
+rule2 = fuzz.interp_membership(FP_N, FPV_Z, Force_NM)
+rule3 = fuzz.interp_membership(FP_N, FPV_P, Force_Z)
+rule4 = fuzz.interp_membership(FP_Z, FPV_N, Force_NL)
+rule5 = fuzz.interp_membership(FP_Z, FPV_Z, Force_Z)
+rule6 = fuzz.interp_membership(FP_Z, FPV_P, Force_PL)
+rule7 = fuzz.interp_membership(FP_P, FPV_N, Force_Z)
+rule8 = fuzz.interp_membership(FP_P, FPV_Z, Force_PM)
+rule9 = fuzz.interp_membership(FP_P, FPV_P, Force_PL)
+
+Continua
