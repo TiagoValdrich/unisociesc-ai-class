@@ -8,6 +8,12 @@ Os exercícios se localizam dentro da pasta `src`, e na pasta `lib` se encontram
 npm i
 ```
 
+## Instalando dependencias em Python
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Executando os exercícios em Node
 
 Para executar os exercícios, se é necessário ter o `node` instalado no seu computador, e executar o seguinte comando no exercício/arquivo js em questão:
