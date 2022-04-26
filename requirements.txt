@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 numpy~=1.22.3
 scikit-fuzzy~=0.4.2
 matplotlib~=3.5.1
-=======
 python-constraint==1.4.0
->>>>>>> upstream/master
+

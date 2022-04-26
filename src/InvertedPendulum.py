@@ -71,4 +71,3 @@ rule7 = fuzz.interp_membership(FP_P, FPV_N, Force_Z)
 rule8 = fuzz.interp_membership(FP_P, FPV_Z, Force_PM)
 rule9 = fuzz.interp_membership(FP_P, FPV_P, Force_PL)
 
-Continua
