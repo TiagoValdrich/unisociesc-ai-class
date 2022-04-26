@@ -5,5 +5,8 @@
   "type": "module",
   "keywords": [],
   "author": "Tiago Jose Valdrich",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "pathfinding": "^0.4.18"
+  }
 }
